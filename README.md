@@ -1,185 +1,50 @@
-# California-Housing-Price-Prediction
-California Housing Price Prediction
+## 🏠 California Housing Price Prediction
 
-Overview
+This project focuses on predicting California housing prices using various regression models. It includes exploratory data analysis (EDA), model comparison, and performance visualization.
 
-This project aims to predict the median house value in California using the 1990 U.S. Census housing data. The dataset contains information such as location (latitude and longitude), housing age, number of rooms and bedrooms, population, households, and median income. Our objective is to build a robust, production-ready machine learning model to accurately forecast housing prices.
+## 📊 Project Highlights
 
-Dataset
+- Built an end-to-end ML pipeline using Python, Pandas, and Scikit-learn.
+- Performed detailed EDA with histograms, scatter plots, and correlation matrices.
+- Trained and compared multiple models including:
+  - Linear Regression
+  - Decision Tree Regressor
+  - Random Forest Regressor
+  - Gradient Boosting Regressor
+- Evaluated models using:
+  - Mean Squared Error (MSE)
+  - R² Score
+- Achieved an R² Score of **0.81** with the Random Forest model.
+- Visualized:
+  - Feature importance
+  - Predicted vs Actual values
+  - Median income vs Median house value
+  - Latitude vs Median house value
+  - Residual plots (optional)
+- Scaled features using `StandardScaler` for better model performance.
 
-The California Housing dataset includes the following key features:
+## 📁 Dataset
 
-longitude: Longitudinal coordinate of the housing block.
+- Used California Housing dataset from `sklearn.datasets` (also available via Google Colab).
+- Features include income, rooms, bedrooms, population, location coordinates, etc.
 
-latitude: Latitudinal coordinate of the housing block.
+## 🛠 Tech Stack
 
-housingMedianAge: Median age of the houses.
+- **Language:** Python
+- **Libraries:** pandas, numpy, matplotlib, seaborn, scikit-learn
 
-totalRooms: Total number of rooms.
+## 🚀 Future Improvements
 
-totalBedrooms: Total number of bedrooms.
+- Deploy model using Streamlit or Flask
+- Integrate with Power BI or Tableau for real-time dashboards
+- Save and load models using `joblib` for deployment
 
-population: Population of the housing block.
+## 📸 Sample Visuals
 
-households: Number of households.
-
-medianIncome: Median income of households (in tens of thousands).
-
-medianHouseValue: The target variable representing the median house value (USD).
-
-Project Structure
-
-.
-├── README.md                   # Project overview and documentation
-├── california_housing_train.csv # Training data file
-├── california_housing_test.csv  # Test data file
-├── model.py                     # Script containing modularized functions for loading data, training, and evaluation
-└── notebooks/                   # Jupyter or Colab notebooks for exploration and visualization
-
-Setup and Execution
-
-Running the Project on Google Colab
-
-Upload Data Files
-
-In your Google Colab environment, upload the california_housing_train.csv and california_housing_test.csv files:
-
-from google.colab import files
-uploaded = files.upload()  # Upload the CSV files
-
-Load and Explore Data
-
-Use pandas to load the data and perform initial exploration:
-
-import pandas as pd
-
-# Load the datasets
-train_data = pd.read_csv('california_housing_train.csv')
-test_data = pd.read_csv('california_housing_test.csv')
-
-# Preview the data
-print(train_data.head())
-print(train_data.describe())
-
-Visualize Data
-
-Generate histograms, correlation matrices, and scatter plots to understand data distributions and relationships:
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Histograms
-train_data.hist(bins=50, figsize=(20,15))
-plt.suptitle("Histograms of California Housing Features", fontsize=20)
-plt.show()
-
-# Correlation Matrix
-plt.figure(figsize=(12,10))
-sns.heatmap(train_data.corr(), annot=True, cmap="coolwarm")
-plt.title("Correlation Matrix", fontsize=18)
-plt.show()
-
-# Scatter Plot: Median Income vs. Median House Value
-plt.figure(figsize=(8,6))
-plt.scatter(train_data['medianIncome'], train_data['medianHouseValue'], alpha=0.3)
-plt.xlabel("Median Income (in tens of thousands)")
-plt.ylabel("Median House Value (USD)")
-plt.title("Median Income vs. Median House Value")
-plt.show()
-
-Code Improvements and Best Practices
-
-1. Modular Code Structure
-
-Break your script into functions to improve maintainability:
-
-def load_data(train_path, test_path):
-    import pandas as pd
-    train = pd.read_csv(train_path)
-    test = pd.read_csv(test_path)
-    return train, test
-
-def visualize_data(df):
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    df.hist(bins=50, figsize=(20,15))
-    plt.suptitle("Histograms of California Housing Features", fontsize=20)
-    plt.show()
-    plt.figure(figsize=(12,10))
-    sns.heatmap(df.corr(), annot=True, cmap="coolwarm")
-    plt.title("Correlation Matrix", fontsize=18)
-    plt.show()
-
-2. Scikit-Learn Pipelines
-
-Utilize pipelines for streamlined preprocessing and model training:
-
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestRegressor
-
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', RandomForestRegressor(n_estimators=100, random_state=42))
-])
-
-3. Hyperparameter Tuning with GridSearchCV
-
-Optimize model parameters for better performance:
-
-from sklearn.model_selection import GridSearchCV
-
-param_grid = {
-    'model__n_estimators': [100, 200],
-    'model__max_depth': [None, 10, 20],
-}
-
-grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='r2', n_jobs=-1)
-grid_search.fit(X_train, y_train)
-print("Best Parameters:", grid_search.best_params_)
-
-4. Enhanced Evaluation Metrics and Visualizations
-
-Evaluate your model using multiple metrics and plots:
-
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-import matplotlib.pyplot as plt
-
-def evaluate_model(model, X_test, y_test):
-    y_pred = model.predict(X_test)
-    mse = mean_squared_error(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-    print(f"MSE: {mse:.2f}, MAE: {mae:.2f}, R2: {r2:.2f}")
-
-    # Predicted vs. Actual
-    plt.figure(figsize=(8,6))
-    plt.scatter(y_test, y_pred, alpha=0.4)
-    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], color='red', linestyle='--')
-    plt.xlabel("Actual Median House Value")
-    plt.ylabel("Predicted Median House Value")
-    plt.title("Predicted vs. Actual")
-    plt.show()
-
-5. Saving the Trained Model
-
-Persist your trained model for later use:
-
-import joblib
-joblib.dump(grid_search.best_estimator_, 'california_housing_model.pkl')
-
-Next Steps and Enhancements
-
-Model Experimentation: Try other models like Linear Regression, XGBoost, or ensemble methods.
-
-Advanced Hyperparameter Tuning: Experiment with techniques like RandomizedSearchCV or Bayesian optimization.
-
-Cross-Validation: Use cross-validation to validate model performance and ensure robustness.
-
-Deployment: Consider deploying your model as a web application using frameworks like Flask or Streamlit.
-
-Documentation & Reporting: Extend the documentation and create reports/presentations summarizing your analysis and findings.
-
-Conclusion
-
-This project demonstrates a full machine learning workflow—from data loading and exploration to model training, hyperparameter tuning, evaluation, and deployment preparation. By following best practices such as modular code design, the use of pipelines, rigorous evaluation, and logging, this project serves as a solid foundation for building production-ready machine learning applications.
+| 📍 Visual | Description |
+|----------|-------------|
+| ✅ Histograms | Distribution of housing data features |
+| ✅ Correlation Matrix | Identify strong/weak correlations |
+| ✅ Scatter Plots | Visual relation between features and house value |
+| ✅ Model Comparison | R² scores and MSE across models |
+| ✅ Feature Importance | Most influential features in prediction |
